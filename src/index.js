@@ -21,7 +21,7 @@ const orbit = new OrbitControls(camera, renderer.domElement);
 camera.position.set(20, 0, 20);
 orbit.update();
 
-const groundGeo = new THREE.PlaneGeometry(30, 30);
+const groundGeo = new THREE.PlaneGeometry(10, 10);
 const groundMat = new THREE.MeshBasicMaterial({
     color: 0xffffff,
     side: THREE.DoubleSide,
