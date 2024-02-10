@@ -15,6 +15,7 @@ const scene = new THREE.Scene();
 const world = new CANNON.World({
     gravity: new CANNON.Vec3(0, -9.81, 0)
 });
+const CannonDebugger = new CannonDebugger(scene, world, {})
 
 
 // Camera
@@ -67,6 +68,7 @@ world.addBody(groundBody)
 const timeStep = 1 / 60;
 function animate() {
     world.step(timeStep);
+    cannonDebugger.update()
 
     boxMesh.position.copy(boxBody.position);
     boxMesh.quaternion.copy(boxBody.quaternion);
