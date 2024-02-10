@@ -46,6 +46,22 @@ const boxBody = new CANNON.Body({
 });
 world.addBody(boxBody);
 
+
+// Sphere
+const sphereGeo = new THREE.SphereGeometry(1);
+const sphereMat = new THREE.MeshBasicMaterial({
+    color: 0xff0000
+});
+const sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
+scene.add(sphereMesh);
+const sphereBody = new CANNON.Body({
+    shape: new CANNON.Sphere(1),
+    mass: 5,
+    position: new CANNON.Vec3(10, 5, 0)
+})
+world.addBody(sphereBody);
+sphereBody.linearDamping = 0.5; // between 0 and 1
+
 //  Ground
 const groundGeo = new THREE.PlaneGeometry(30, 30);
 const groundMat = new THREE.MeshBasicMaterial({
