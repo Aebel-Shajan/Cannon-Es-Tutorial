@@ -12,10 +12,11 @@
   "license": "ISC",
   "dependencies": {
     "cannon-es": "^0.20.0",
+    "cannon-es-debugger": "^1.0.0",
     "three": "^0.161.0"
   },
   "devDependencies": {
-    "watch": "^1.0.2",
+    "watch": "^0.13.0",
     "webpack": "^5.90.1",
     "webpack-cli": "^5.1.4"
   }

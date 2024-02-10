@@ -1,35 +1,36 @@
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import * as CANNON from 'cannon-es';
+import CannonDebugger from 'cannon-es-debugger';
 
 
-// Setup
+// Renderer
 const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+
+// Setup
 const scene = new THREE.Scene();
+const world = new CANNON.World({
+    gravity: new CANNON.Vec3(0, -9.81, 0)
+});
+
+
+// Camera
 const camera = new THREE.PerspectiveCamera(
     45,
     window.innerWidth / window.innerHeight,
     0.1,
     1000
 );
-
-const world = new CANNON.World({
-    gravity: new CANNON.Vec3(0, -9.81, 0)
-});
-
-// Sets orbit control to move the camera around
 const orbit = new OrbitControls(camera, renderer.domElement);
-
-// Camera positioning
 camera.position.set(30, 30, 30);
 orbit.update();
 
 
-
 // Objects
+//  Box
 const boxGeo = new THREE.BoxGeometry(2, 2, 2);
 const boxMat = new THREE.MeshBasicMaterial({
     color: 0x00ff00,
@@ -37,7 +38,6 @@ const boxMat = new THREE.MeshBasicMaterial({
 });
 const boxMesh = new THREE.Mesh(boxGeo, boxMat);
 scene.add(boxMesh);
-
 const boxBody = new CANNON.Body({
     shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1)),
     mass: 1,
@@ -45,6 +45,7 @@ const boxBody = new CANNON.Body({
 });
 world.addBody(boxBody);
 
+//  Ground
 const groundGeo = new THREE.PlaneGeometry(30, 30);
 const groundMat = new THREE.MeshBasicMaterial({
     color: 0xffffff,
@@ -53,7 +54,6 @@ const groundMat = new THREE.MeshBasicMaterial({
 })
 const groundMesh = new THREE.Mesh(groundGeo, groundMat);
 scene.add(groundMesh);
-
 const groundBody = new CANNON.Body({
     shape: new CANNON.Plane(),
     // mass: 10,
@@ -63,8 +63,8 @@ groundBody.quaternion.setFromEuler(- Math.PI / 2, 0, 0);
 world.addBody(groundBody)
 
 
+// Animation Loop
 const timeStep = 1 / 60;
-
 function animate() {
     world.step(timeStep);
 
@@ -77,9 +77,10 @@ function animate() {
 
     renderer.render(scene, camera);
 }
-
 renderer.setAnimationLoop(animate);
 
+
+// Resize renderer
 window.addEventListener('resize', function() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
