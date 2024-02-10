@@ -33,10 +33,7 @@ orbit.update();
 // Objects
 //  Box
 const boxGeo = new THREE.BoxGeometry(2, 2, 2);
-const boxMat = new THREE.MeshBasicMaterial({
-    color: 0x00ff00,
-    wireframe: true
-});
+const boxMat = new THREE.MeshBasicMaterial();
 const boxMesh = new THREE.Mesh(boxGeo, boxMat);
 scene.add(boxMesh);
 const boxBody = new CANNON.Body({
