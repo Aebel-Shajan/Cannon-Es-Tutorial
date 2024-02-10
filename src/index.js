@@ -36,10 +36,12 @@ const boxGeo = new THREE.BoxGeometry(2, 2, 2);
 const boxMat = new THREE.MeshBasicMaterial();
 const boxMesh = new THREE.Mesh(boxGeo, boxMat);
 scene.add(boxMesh);
+const boxPhysMat = new CANNON.Material();
 const boxBody = new CANNON.Body({
     shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1)),
     mass: 1,
     position: new CANNON.Vec3(0, 10, 0),
+    material: boxPhysMat
 });
 world.addBody(boxBody);
 
@@ -54,7 +56,7 @@ scene.add(sphereMesh);
 const sphereBody = new CANNON.Body({
     shape: new CANNON.Sphere(1),
     mass: 5,
-    position: new CANNON.Vec3(10, 5, 0)
+    position: new CANNON.Vec3(1, 5, 0)
 })
 world.addBody(sphereBody);
 sphereBody.linearDamping = 0.5; // between 0 and 1
@@ -67,14 +69,24 @@ const groundMat = new THREE.MeshBasicMaterial({
 })
 const groundMesh = new THREE.Mesh(groundGeo, groundMat);
 scene.add(groundMesh);
+const groundPhysMat = new CANNON.Material();
 const groundBody = new CANNON.Body({
     shape: new CANNON.Plane(),
-    // mass: 10,
-    type: CANNON.Body.STATIC
+    type: CANNON.Body.STATIC,
+    material: groundPhysMat
 })
 groundBody.quaternion.setFromEuler(- Math.PI / 2, 0, 0);
 world.addBody(groundBody)
 
+
+// Contact material
+
+const groundBoxContactMat = new CANNON.ContactMaterial(
+    groundPhysMat,
+    boxPhysMat,
+    {friction: 0, restitution: 0.5}
+)
+world.addContactMaterial(groundBoxContactMat);
 
 // Animation Loop
 const timeStep = 1 / 60;
